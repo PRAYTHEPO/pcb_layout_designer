@@ -1,5 +1,7 @@
 # PCB LAYOUT DESIGNER
 
+https://praythepo.github.io/pcb_layout_designer/
+
 РУССКИЙ
 
 Простой и понятный апплет для проектирования разводки на печатной плате для ручной пайки и навесного монтажа.
