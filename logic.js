@@ -37,8 +37,8 @@ class Component {
     getPinLabel(idx) {
         if (this.config.labels) return this.config.labels[idx];
         if (this.type === 'opamp') {
-            if (idx < 4) return 4 - idx; // 4,3,2,1
-            return idx + 1; // 5,6,7,8
+            if (idx < 4) return 4 - idx; 
+            return idx + 1; 
         }
         return idx + 1;
     }
@@ -120,7 +120,7 @@ function draw() {
     }
 
     const drawPwrLine = (p, vcc) => {
-        const pos = p.comp.getPinPos(p.idx), ry = (pos.y < ROWS/2) ? (vcc ? rails[0] : rails[1]) : (vcc ? rails[2] : rails[3]);
+        const pos = p.comp.getPinPos(p.idx), ry = (pos.y < ROWS/2) ? rails[vcc?0:1] : rails[vcc?2:3];
         ctx.strokeStyle = vcc ? "#f22" : "#555"; ctx.lineWidth = 4;
         ctx.beginPath(); ctx.moveTo(pos.x*GRID+OFFSET, pos.y*GRID+OFFSET); ctx.lineTo(pos.x*GRID+OFFSET, ry); ctx.stroke();
     };
@@ -196,9 +196,9 @@ window.onmousemove = (e) => {
     if(!currentMousePin) connections.forEach(cn => { if(checkWireHit(mx, my, cn)) hoveredWire = cn; });
     if(currentMousePin) {
         const p = currentMousePin;
-        let h = `<b style="color:white">${p.comp.config.name}${p.comp.id}: Пин ${p.comp.getPinLabel(p.idx)}</b>`;
-        if(vccPins.some(v => v.comp===p.comp && v.idx===p.idx)) h += `<div style="color:red">● VCC</div>`;
-        if(gndPins.some(g => g.comp===p.comp && g.idx===p.idx)) h += `<div style="color:gray">● GND</div>`;
+        let h = `<b>${p.comp.config.name}${p.comp.id}: Пин ${p.comp.getPinLabel(p.idx)}</b>`;
+        if(vccPins.some(v => v.comp===p.comp && v.idx===p.idx)) h += `<div style="color:#ff4d4d">● VCC</div>`;
+        if(gndPins.some(g => g.comp===p.comp && g.idx===p.idx)) h += `<div style="color:#888">● GND</div>`;
         connections.filter(cn => (cn.p1.comp===p.comp && cn.p1.idx===p.idx) || (cn.p2.comp===p.comp && cn.p2.idx===p.idx)).forEach(cn => {
             const dest = (cn.p1.comp === p.comp && cn.p1.idx === p.idx) ? cn.p2 : cn.p1;
             h += `<div style="color:${cn.color}">● ${dest.comp.config.name}${dest.comp.id} (${dest.comp.getPinLabel(dest.idx)})</div>`;
@@ -214,6 +214,7 @@ window.onmousemove = (e) => {
 };
 
 canvas.onmousedown = (e) => {
+    const r = canvas.getBoundingClientRect(), mx = e.clientX-r.left, my = e.clientY-r.top;
     if(e.button === 0) {
         if(hoveredWire) connections = connections.filter(c => c !== hoveredWire);
         else if(currentMousePin) {
