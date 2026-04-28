@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>PCB Layout Designer - Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="tooltip"></div>
+    
+    <!-- МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ПЛАТЫ -->
+    <div id="modal-overlay" class="modal-ov">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: var(--accent); font-size: 16px;">Новая плата</h3>
+                <button onclick="hideModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #777; padding: 0; line-height: 1;">&times;</button>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 5px; color: #aaa;">Ширина (макс. 40):</div>
+            <input type="number" id="boardW" value="24" min="1" max="40">
+            <div style="font-size: 12px; margin-bottom: 5px; color: #aaa;">Высота (макс. 24):</div>
+            <input type="number" id="boardH" value="18" min="1" max="24">
+            <button class="btn-main" onclick="initNewBoard()" style="margin-top: 10px;">Создать</button>
+        </div>
+    </div>
+
+    <!-- ВЕРХНЯЯ ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
+    <header class="topbar">
+        <div class="logo">PCB LAYOUT DESIGNER</div>
+        <div class="status-info">v1.1</div>
+    </header>
+
+    <div class="app">
+        <!-- ЛЕВАЯ ПАНЕЛЬ (Инструменты) -->
+        <aside class="sidebar left">
+            <button class="btn-main" onclick="showModal()">+ Новая плата</button>
+            <div class="comp-grid">
+                <div class="comp-btn" onclick="addComp('resistor')">🟦 Res</div>
+                <div class="comp-btn" onclick="addComp('capacitor')">🟨 Cap</div>
+                <div class="comp-btn" onclick="addComp('elecCap')">🟩 E-Cap</div>
+                <div class="comp-btn" onclick="addComp('transistor')">🟥 CBE</div>
+                <div class="comp-btn" onclick="addComp('transistor_bce')">🟥 BCE</div>
+                <div class="comp-btn" onclick="addComp('opamp')">⬜ IC</div>
+            </div>
+            <hr>
+            <button onclick="saveToFile()">💾 Сохранить</button>
+            <button onclick="document.getElementById('fileInput').click()">📁 Открыть</button>
+            <input type="file" id="fileInput" style="display:none" onchange="loadFromFile(event)">
+            
+            <div style="flex: 1;"></div> <!-- Пружина для прижатия кнопок вниз -->
+            
+            <button class="btn-main" id="toggleMode" onclick="toggleRenderMode()" style="background: #443355; margin-bottom: 5px;">🎨 Режим: Графика</button>
+        </aside>
+
+        <!-- ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
+        <main class="workspace">
+            <canvas id="board"></canvas>
+        </main>
+
+        <!-- ПРАВАЯ ПАНЕЛЬ (Легенда и статус) -->
+        <aside class="sidebar right">
+            <h3>ИНСТРУКЦИЯ</h3>
+            <div class="legend-group">
+                <h4>Мышь</h4>
+                <p><span>ЛКМ:</span> Выбор / Соединение</p>
+                <p><span>Колесо:</span> Перетаскивание</p>
+                <p><span>ПКМ:</span> Очистить ножку</p>
+            </div>
+            <div class="legend-group">
+                <h4>Клавиатура</h4>
+                <p><span>R:</span> Поворот</p>
+                <p><span>Del:</span> Удалить деталь</p>
+                <p><span>V:</span> Назначить VCC</p>
+                <p><span>G:</span> Назначить GND</p>
+                <p><span>H:</span> Скрыть сетку</p>
+            </div>
+            <hr>
+            <div class="legend-group">
+                <h4>Сетка ножек</h4>
+                <p><i class="dot vcc" style="background: red; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px;"></i> Питание VCC (+)</p>
+                <p><i class="dot gnd" style="background: black; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px;"></i> Питание GND (-)</p>
+                <p><i class="dot mult" style="background: #00e5ff; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px;"></i> Множественные соединения (M)</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ПОДКЛЮЧЕНИЕ ЛОГИКИ -->
+    <script src="logic.js"></script>
+</body>
+</html>
