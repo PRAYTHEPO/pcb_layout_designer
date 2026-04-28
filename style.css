@@ -112,21 +112,22 @@ canvas {
     box-shadow: 0 0 40px rgba(0,0,0,0.5); 
 }
 
-/* Тултип (Светлый) */
+/* Тултип (Возвращен к темному дизайну) */
 #tooltip { 
     position: fixed; 
     pointer-events: none; 
-    background: #fff; 
-    color: #222;
-    padding: 10px; 
-    border: 1px solid var(--accent); 
-    border-radius: 6px; 
+    background: rgba(20, 20, 20, 0.95); /* Глубокий темный фон */
+    color: #fff;                        /* Белый текст */
+    padding: 12px; 
+    border: 1px solid var(--accent);    /* Тонкая рамка цвета акцента */
+    border-radius: 8px; 
     display: none; 
     z-index: 1000; 
     font-size: 12px; 
-    min-width: 120px; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+    min-width: 140px; 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
 }
+
 
 /* Модальное окно */
 .modal-ov { 
